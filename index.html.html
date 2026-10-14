@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohit Madde — Elite Data Analyst Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        warmbg: '#faf6f0',
+                        cardbg: '#ffffff',
+                        cardborder: '#e8dfd3',
+                        warmtext: '#2c221e',
+                        warmaccent: '#b45309',
+                        warmgold: '#d97706',
+                        softwarm: '#fef3c7',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Warm Beige / Champagne Gradient Background matching the user's reference image */
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #fbf7f2 0%, #f4ede2 50%, #eee3d2 100%);
+            color: #2c221e;
+            overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .warm-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(120px);
+            opacity: 0.6;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            mix-blend-mode: multiply;
+            animation: floatBlob 24s infinite alternate ease-in-out;
+        }
+
+        .blob:nth-child(1) { width: 600px; height: 600px; background: #fde68a; top: 10%; left: 10%; animation-duration: 18s; }
+        .blob:nth-child(2) { width: 700px; height: 700px; background: #fed7aa; top: 35%; left: 55%; animation-duration: 25s; }
+        .blob:nth-child(3) { width: 500px; height: 500px; background: #fef08a; top: 65%; left: 20%; animation-duration: 20s; }
+        .blob:nth-child(4) { width: 650px; height: 650px; background: #ffedd5; top: 15%; left: 70%; animation-duration: 28s; }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(70px, -90px) scale(1.15) rotate(180deg); }
+            100% { transform: translate(-60px, 80px) scale(0.9) rotate(360deg); }
+        }
+
+        /* Clean Warm Professional Cards matching the screenshot */
+        .glass-card {
+            background: #ffffff;
+            border: 1px solid #e8dfd3;
+            box-shadow: 0 10px 30px rgba(44, 34, 30, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: #d97706;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(217, 119, 6, 0.1);
+        }
+
+        /* Typing cursor animation */
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: #d97706;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Page Transition Animations */
+        .page-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .page-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #faf6f0; }
+        ::-webkit-scrollbar-thumb { background: #dcd2c3; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d97706; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-white">
+
+    <!-- Warm Background Orbs -->
+    <div class="warm-bg-container">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <!-- Professional Floating Header / 5-Page Router -->
+    <header class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-3xl bg-white/90 backdrop-blur-2xl border border-amber-900/10 rounded-full px-6 py-3 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
+            <div class="w-3 h-3 rounded-full bg-amber-600 animate-pulse"></div>
+            <span class="font-bold text-sm tracking-tight text-[#2c221e]">Rohit Madde</span>
+        </div>
+        <nav class="hidden md:flex space-x-1 text-xs font-medium text-slate-600 bg-amber-50/80 p-1 rounded-full border border-amber-900/5">
+            <button onclick="navigateTo('home')" id="btn-home" class="nav-btn px-4 py-1.5 rounded-full text-white bg-amber-600 transition">Home</button>
+            <button onclick="navigateTo('about')" id="btn-about" class="nav-btn px-4 py-1.5 rounded-full hover:text-amber-700 transition">About</button>
+            <button onclick="navigateTo('experience')" id="btn-experience" class="nav-btn px-4 py-1.5 rounded-full hover:text-amber-700 transition">Experience</button>
+            <button onclick="navigateTo('projects')" id="btn-projects" class="nav-btn px-4 py-1.5 rounded-full hover:text-amber-700 transition">Projects</button>
+            <button onclick="navigateTo('contact')" id="btn-contact" class="nav-btn px-4 py-1.5 rounded-full hover:text-amber-700 transition">Contact</button>
+        </nav>
+        <div class="flex items-center space-x-3 text-xs">
+            <a href="https://www.linkedin.com/in/rohit-m-41223432a/" target="_blank" class="hidden sm:inline-block text-[#2c221e] font-semibold hover:text-amber-600 transition">LinkedIn</a>
+            <a href="mailto:rohit.madde.0213@gmail.com" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-1.5 rounded-full transition font-medium shadow-md">Let's Talk</a>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer Bar -->
+    <div class="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-11/12 bg-white/95 backdrop-blur-xl border border-amber-900/10 rounded-full p-2 flex justify-around text-xs font-medium text-slate-600 shadow-2xl">
+        <button onclick="navigateTo('home')" id="mbtn-home" class="mob-btn text-white px-3 py-1.5 rounded-full bg-amber-600">Home</button>
+        <button onclick="navigateTo('about')" id="mbtn-about" class="mob-btn px-3 py-1.5 rounded-full">About</button>
+        <button onclick="navigateTo('experience')" id="mbtn-experience" class="mob-btn px-3 py-1.5 rounded-full">Exp</button>
+        <button onclick="navigateTo('projects')" id="mbtn-projects" class="mob-btn px-3 py-1.5 rounded-full">Projects</button>
+        <button onclick="navigateTo('contact')" id="mbtn-contact" class="mob-btn px-3 py-1.5 rounded-full">Contact</button>
+    </div>
+
+    <!-- MAIN DYNAMIC CONTENT CONTAINER (5 PAGES) -->
+    <main class="max-w-5xl mx-auto px-6 pt-36 pb-28 flex-grow w-full z-10">
+
+        <!-- ================= PAGE 1: SCROLLABLE HOME ================= -->
+        <div id="page-home" class="page-content active space-y-24">
+            <!-- Hero Section with Dynamic Typing Effect -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[75vh]">
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/70 border border-amber-900/10 text-amber-800 text-xs font-semibold tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-amber-600 animate-ping"></span> Data Analyst, Data Engineer, & BI Specialist — Pune, India
+                    </div>
+                    
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#2c221e] leading-tight min-h-[140px] sm:min-h-[120px]">
+                        Hi, I'm Rohit.<br>
+                        <span id="typing-text" class="text-amber-700"></span><span class="typing-cursor">&nbsp;</span>
+                    </h1>
+                    
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-xl">
+                        Elite Data Analyst building high-performance data architectures, analytical pipelines, and comprehensive BI dashboards.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2 justify-center lg:justify-start">
+                        <button onclick="navigateTo('projects')" class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold transition shadow-xl shadow-amber-600/20">Explore Projects &rarr;</button>
+                        <button onclick="navigateTo('contact')" class="px-6 py-3 rounded-2xl glass-card text-[#2c221e] text-sm font-semibold hover:border-amber-600 transition">Get in Touch</button>
+                    </div>
+                </div>
+
+                <!-- Interactive Profile Bento Card -->
+                <div class="lg:col-span-5">
+                    <div class="glass-card p-8 rounded-3xl space-y-6 relative overflow-hidden">
+                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="space-y-2">
+                            <h3 class="text-xs uppercase tracking-widest text-amber-700 font-bold">Quick Verification</h3>
+                            <h4 class="text-2xl font-bold text-[#2c221e]">Rohit Madde</h4>
+                            <p class="text-sm text-slate-600">Data Science & ML @ Scaler | MBA Business Analytics</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <a href="https://github.com/rohitmadde0213-hub" target="_blank" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex flex-col gap-1 group">
+                                <span class="text-[10px] text-slate-500 uppercase font-semibold">Code Repos</span>
+                                <span class="text-sm font-bold text-[#2c221e] group-hover:text-amber-700 transition">GitHub Hub &nearr;</span>
+                            </a>
+                            <a href="https://public.tableau.com/app/profile/rohit.madde/vizzes" target="_blank" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex flex-col gap-1 group">
+                                <span class="text-[10px] text-slate-500 uppercase font-semibold">Visualizations</span>
+                                <span class="text-sm font-bold text-[#2c221e] group-hover:text-amber-700 transition">Tableau Vizzes &nearr;</span>
+                            </a>
+                            <a href="https://www.scaler.com/academy/profile/0f0079e70937" target="_blank" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex flex-col gap-1 group">
+                                <span class="text-[10px] text-slate-500 uppercase font-semibold">Accreditation</span>
+                                <span class="text-sm font-bold text-[#2c221e] group-hover:text-amber-700 transition">Scaler Profile &nearr;</span>
+                            </a>
+                            <a href="https://www.linkedin.com/in/rohit-m-41223432a/" target="_blank" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex flex-col gap-1 group">
+                                <span class="text-[10px] text-slate-500 uppercase font-semibold">Network</span>
+                                <span class="text-sm font-bold text-[#2c221e] group-hover:text-amber-700 transition">LinkedIn &nearr;</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Section 1: Things I'm Good At -->
+            <div class="space-y-8 pt-10 border-t border-amber-900/10">
+                <div class="space-y-2 text-center sm:text-left">
+                    <h2 class="text-3xl font-extrabold tracking-tight text-[#2c221e]">Things I'm Good At</h2>
+                    <p class="text-slate-600 text-sm">Core competencies, database engines, and analytical frameworks.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-3xl space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-900/10 flex items-center justify-center text-amber-700 font-bold text-lg">01</div>
+                        <h4 class="font-bold text-[#2c221e] text-base">Data Extraction & Querying</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Writing highly optimized Advanced SQL queries, window functions, CTEs, and BigQuery scripts for large-scale data wrangling.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-900/10 flex items-center justify-center text-amber-700 font-bold text-lg">02</div>
+                        <h4 class="font-bold text-[#2c221e] text-base">Exploratory Data Analysis</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Executing statistical testing (Shapiro-Wilk, Mann-Whitney U, 2-Sample T-Tests), outlier treatment, and feature engineering via Python (Pandas, NumPy, SciPy).</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-900/10 flex items-center justify-center text-amber-700 font-bold text-lg">03</div>
+                        <h4 class="font-bold text-[#2c221e] text-base">Business Intelligence & BI</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Designing dynamic Tableau and Power BI dashboards with real-time KPI tracking to drive executive decision-making.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Section 2: Official Proof I Know Stuff (Exact user certificates) -->
+            <div class="space-y-8 pt-10 border-t border-amber-900/10">
+                <div class="space-y-2 text-center sm:text-left">
+                    <h2 class="text-3xl font-extrabold tracking-tight text-[#2c221e]">Official Proof I Know Stuff</h2>
+                    <p class="text-slate-600 text-sm">Verified professional certifications and technical mastery.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Cert 1: SQL Scaler -->
+                    <div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg shrink-0">🗄️</div>
+                            <div>
+                                <h4 class="font-bold text-[#2c221e] text-sm sm:text-base">SQL Skill Mastery Certification</h4>
+                                <p class="text-xs text-slate-500">🎓 Scaler Data Science Program</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-200 shrink-0">Certified</span>
+                    </div>
+
+                    <!-- Cert 2: Python Libraries Scaler -->
+                    <div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 font-bold text-lg shrink-0">🐍</div>
+                            <div>
+                                <h4 class="font-bold text-[#2c221e] text-sm sm:text-base">Python Libraries Skill Mastery</h4>
+                                <p class="text-xs text-slate-500">🎓 Scaler Data Science Program</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-200 shrink-0">Certified</span>
+                    </div>
+
+                    <!-- Cert 3: EDA Scaler -->
+                    <div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-lg shrink-0">📈</div>
+                            <div>
+                                <h4 class="font-bold text-[#2c221e] text-sm sm:text-base">Exploratory Data Analysis (EDA) Mastery</h4>
+                                <p class="text-xs text-slate-500">🎓 Scaler Data Science Program</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-200 shrink-0">Certified</span>
+                    </div>
+
+                    <!-- Cert 4: Tableau & Advanced Excel -->
+                    <div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 font-bold text-lg shrink-0">📊</div>
+                            <div>
+                                <h4 class="font-bold text-[#2c221e] text-sm sm:text-base">Tableau and Advanced Excel Certificate of Excellence</h4>
+                                <p class="text-xs text-slate-500">🎓 Scaler DSML Program (NSDC Partner)</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-200 shrink-0">Certified</span>
+                    </div>
+
+                    <!-- Cert 5: Google Analytics Certification -->
+                    <div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 font-bold text-lg shrink-0">🌐</div>
+                            <div>
+                                <h4 class="font-bold text-[#2c221e] text-sm sm:text-base">Google Analytics Certification</h4>
+                                <p class="text-xs text-slate-500">🏢 Google</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-200 shrink-0">January 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Highlights Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6">
+                <div class="glass-card p-6 rounded-2xl space-y-2">
+                    <div class="text-3xl font-black text-amber-700">30%</div>
+                    <h5 class="font-semibold text-[#2c221e] text-sm">Workflow Optimization</h5>
+                    <p class="text-xs text-slate-600">Streamlined data workflows and extraction pipelines across multi-system environments.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl space-y-2">
+                    <div class="text-3xl font-black text-amber-600">99.8%</div>
+                    <h5 class="font-semibold text-[#2c221e] text-sm">Data Accuracy</h5>
+                    <p class="text-xs text-slate-600">Rigorous validation checks and reporting governance ensuring pristine data integrity.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl space-y-2">
+                    <div class="text-3xl font-black text-amber-700">50%</div>
+                    <h5 class="font-semibold text-[#2c221e] text-sm">Report Speedup</h5>
+                    <p class="text-xs text-slate-600">Reduced manual report generation latency through automated dashboarding solutions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 2: ABOUT ================= -->
+        <div id="page-about" class="page-content space-y-12">
+            <div class="space-y-3">
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#2c221e]">About Me & Expertise</h2>
+                <p class="text-slate-600 text-sm max-w-2xl">A comprehensive breakdown of my technical stack, domain experience, and educational background.</p>
+            </div>
+
+            <!-- Bento Grid Skills -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-3xl space-y-4 md:col-span-2">
+                    <h3 class="text-lg font-bold text-[#2c221e] flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span> Core Technical Stack
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Advanced SQL</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Google BigQuery</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Python & Pandas</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Tableau & Power BI</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">ETL Pipeline Design</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Exploratory Data Analysis</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Advanced Excel & VBA</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">MySQL & SQLite</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 font-medium text-[#2c221e]">Git & GitHub Versioning</div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl space-y-4">
+                    <h3 class="text-lg font-bold text-[#2c221e] flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-700"></span> Certifications
+                    </h3>
+                    <ul class="space-y-3 text-xs text-slate-600">
+                        <li class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <strong class="text-[#2c221e] block mb-0.5">Scaler Data Science & ML</strong>
+                            Specialized program in SQL, Tableau, Python, and Machine Learning.
+                        </li>
+                        <li class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <strong class="text-[#2c221e] block mb-0.5">Google Analytics Certified</strong>
+                            Verified tracking, metrics, and data analysis certification.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="glass-card p-8 rounded-3xl space-y-6">
+                <h3 class="text-xl font-bold text-[#2c221e] border-b border-amber-900/10 pb-4">Education Background</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-900/10">2026</span>
+                        <h4 class="font-bold text-[#2c221e] text-lg">Scaler</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Specialized training in Data Science & Machine Learning, focusing on statistical analysis, advanced SQL, and production-grade project execution.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-900/10">2023</span>
+                        <h4 class="font-bold text-[#2c221e] text-lg">Dr. D.Y. Patil Pune University</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Master of Business Administration (MBA) in Business Analytics, emphasizing analytical decision-making and quantitative business strategy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 3: EXPERIENCE ================= -->
+        <div id="page-experience" class="page-content space-y-12">
+            <div class="space-y-3">
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#2c221e]">Professional Experience</h2>
+                <p class="text-slate-600 text-sm max-w-2xl">A chronological record of project milestones, execution achievements, and analytical impact.</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Milestone Project Experience 1 -->
+                <div class="glass-card p-8 rounded-3xl space-y-4 relative overflow-hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#2c221e]">Data Extraction & Pipeline Automation Specialist</h3>
+                            <p class="text-sm text-amber-700 font-semibold">Independent & Collaborative Data Projects</p>
+                        </div>
+                        <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-900/10">Recent Work</span>
+                    </div>
+                    <ul class="text-xs sm:text-sm text-slate-600 space-y-2.5 list-disc list-inside leading-relaxed pt-2">
+                        <li>Designed and executed complex data extraction and ETL processes using advanced SQL to pull, transform, and load data from multiple structured sources, ensuring high accuracy and consistency.</li>
+                        <li>Built and optimized SQL queries in BigQuery and MySQL for large-scale data extraction and transactional performance tuning.</li>
+                        <li>Integrated multi-system data using joins, subqueries, and CTEs, streamlining workflows by 30% to create unified, analysis-ready datasets.</li>
+                        <li>Developed interactive Tableau dashboards enabling real-time KPI tracking with filters, drill-downs, and calculated measures.</li>
+                    </ul>
+                </div>
+
+                <!-- Milestone Project Experience 2 -->
+                <div class="glass-card p-8 rounded-3xl space-y-4 relative overflow-hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#2c221e]">Financial Risk & Fraud Analytics Practitioner</h3>
+                            <p class="text-sm text-amber-700 font-semibold">Credit Abuse & Risk Operations Focus</p>
+                        </div>
+                        <span class="text-xs bg-slate-100 text-slate-700 font-semibold px-3 py-1 rounded-full border border-slate-200">Applied Analytics</span>
+                    </div>
+                    <ul class="text-xs sm:text-sm text-slate-600 space-y-2.5 list-disc list-inside leading-relaxed pt-2">
+                        <li>Conducted deep-dive financial data analysis on large datasets, evaluating exposure to credit, market, and liquidity risks to support rigorous mitigation strategies.</li>
+                        <li>Maintained advanced SQL queries driving cross-functional business intelligence and metric governance.</li>
+                        <li>Strengthened data validation and auditing protocols, improving reporting accuracy by 35% across analytical deliverables.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 4: PROJECTS WITH WORKING FILTERS ================= -->
+        <div id="page-projects" class="page-content space-y-12">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-amber-900/10 pb-6">
+                <div class="space-y-1">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#2c221e]">Featured Projects</h2>
+                    <p class="text-slate-600 text-sm">Interactive data visualization, exploratory data analysis, feature engineering, and cloud SQL solutions.</p>
+                </div>
+                <!-- Fully Functional Filter Tabs -->
+                <div class="flex flex-wrap gap-2 text-xs bg-white p-1.5 rounded-2xl border border-amber-900/10 shadow-sm">
+                    <button onclick="filterProjects('all')" id="filter-btn-all" class="filter-tab px-4 py-2 rounded-xl bg-amber-600 text-white font-semibold transition shadow-md">All Projects</button>
+                    <button onclick="filterProjects('tableau')" id="filter-btn-tableau" class="filter-tab px-4 py-2 rounded-xl text-slate-600 hover:text-amber-700 transition">Tableau / BI</button>
+                    <button onclick="filterProjects('sql')" id="filter-btn-sql" class="filter-tab px-4 py-2 rounded-xl text-slate-600 hover:text-amber-700 transition">SQL / BigQuery</button>
+                    <button onclick="filterProjects('eda')" id="filter-btn-eda" class="filter-tab px-4 py-2 rounded-xl text-slate-600 hover:text-amber-700 transition">EDA & Python</button>
+                </div>
+            </div>
+
+            <!-- Project Cards Grid -->
+            <div id="projects-container" class="grid grid-cols-1 gap-6">
+                
+                <!-- Project 1: Data Bank SQL Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="sql">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Data Bank — SQL Project (Neo-Bank Cloud Analytics)</h3>
+                        <a href="https://github.com/rohitmadde0213-hub/Data_Bank-SQL-Case-Study" target="_blank" class="text-xs bg-amber-100 text-amber-800 hover:bg-amber-200 px-4 py-2 rounded-full border border-amber-900/10 font-semibold transition flex items-center gap-1.5">
+                            View GitHub Repository &nearr;
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Overview</strong> Analyzed neo-bank customer node allocations, transaction metrics, and cloud storage growth where storage limits tie directly to account balances.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Advanced SQL Execution</strong> Leveraged CTEs, window functions (NTILE percentiles, LAG), and DATEDIFF metrics to calculate reallocation medians, monthly closing balances, and balance growth percentages.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Advanced SQL</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Window Functions</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">CTEs & Percentiles</span>
+                    </div>
+                </div>
+
+                <!-- Project 2: Aerofit EDA Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="eda">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Aerofit — Exploratory Data Analysis Project</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-4 py-2 rounded-full border border-amber-900/10 font-semibold">Python & Statistics</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Problem Statement</strong> Conducted exploratory data analysis on treadmill customer profiles (KP281, KP481, KP781) to understand demographic and fitness characteristics.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Key Insights</strong> Discovered that core customers are 25-45 years old with steady income brackets. Evaluated conditional probabilities and gender-based purchase distributions to formulate targeted marketing strategies.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Pandas & NumPy</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Seaborn & Matplotlib</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Probability & EDA</span>
+                    </div>
+                </div>
+
+                <!-- Project 3: Delhivery Feature Engineering Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="sql eda">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Delhivery — Feature Engineering & Logistics Analysis</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-4 py-2 rounded-full border border-amber-900/10 font-semibold">Logistics & Data Modeling</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Overview</strong> Processed raw delivery trips data to engineer spatial features, handle missing destination names, and aggregate segment-level metrics.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Execution & Hypothesis Testing</strong> Handled outliers across transit time and distance features. Executed Shapiro-Wilk and Mann-Whitney U rank tests comparing OSRM vs actual travel metrics.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Feature Engineering</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Hypothesis Testing</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Outlier Treatment</span>
+                    </div>
+                </div>
+
+                <!-- Project 4: Netflix Exploratory Data Analysis -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="eda">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Netflix — Content Exploratory Data Analysis</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-4 py-2 rounded-full border border-amber-900/10 font-semibold">Media Analytics</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Problem Statement</strong> Analyzed Netflix's movies and TV shows catalog to uncover trends in release years, genres, country-wise distribution, and content ratings.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Impact</strong> Visualized distribution ratios between movies and international television series to understand platform content acquisition strategies.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Data Visualization</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Python Pandas</span>
+                    </div>
+                </div>
+
+                <!-- Project 5: Walmart Exploratory Data Analysis -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="eda sql">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Walmart — Retail Sales & Metric Analysis</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-4 py-2 rounded-full border border-amber-900/10 font-semibold">Retail Analytics</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Problem Statement</strong> Examined retail store transaction datasets to analyze sales performance across departments, holidays, and regional stores.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Impact</strong> Defined core problem statements and calculated basic sales metrics to identify top-performing revenue drivers.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Retail Data Analysis</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Statistical Summary</span>
+                    </div>
+                </div>
+
+                <!-- Project 6: Yulu Hypothesis Testing Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="eda">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Yulu — Demand Forecasting & Hypothesis Testing</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-4 py-2 rounded-full border border-amber-900/10 font-semibold">Statistical Testing</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Problem Statement</strong> Investigated factors affecting the demand for shared electric cycles in the Indian market to help Yulu understand user behavior.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Statistical Testing</strong> Performed 2-Sample T-Tests to evaluate working day effects on cycle rentals, ANOVA, and Chi-Square tests to derive actionable business insights.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">2-Sample T-Test</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">ANOVA & Chi-Square</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">SciPy & Stats</span>
+                    </div>
+                </div>
+
+                <!-- Project 7: Customer Dashboard Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="tableau sql">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Customer Dashboard Project</h3>
+                        <a href="https://public.tableau.com/views/CustomerDashboardRequirements/CustomerDashboard" target="_blank" class="text-xs bg-amber-100 text-amber-800 hover:bg-amber-200 px-4 py-2 rounded-full border border-amber-900/10 font-semibold transition flex items-center gap-1.5">
+                            View Live Tableau Dashboard &nearr;
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Challenge</strong> Fragmented metrics across region, product category, and customer type delayed leadership decision-making.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Execution & Impact</strong> Queried multi-dimensional datasets using advanced SQL and integrated them with Tableau, improving decision speed by 40%.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Tableau</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Advanced SQL</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">BI Platform</span>
+                    </div>
+                </div>
+
+                <!-- Project 8: Pizza Runner SQL Analytics Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="sql">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Pizza Runner SQL Analytics Project (BigQuery)</h3>
+                        <a href="https://console.cloud.google.com/bigquery?sq=481662419604:db75f9e0f31f42aaaa07193291c1c765" target="_blank" class="text-xs bg-amber-100 text-amber-800 hover:bg-amber-200 px-4 py-2 rounded-full border border-amber-900/10 font-semibold transition flex items-center gap-1.5">
+                            View BigQuery Console &nearr;
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Challenge</strong> Raw transactional order and delivery data lacked structure, hindering quick exploratory analysis and delivery tracking.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Execution & Impact</strong> Developed complex SQL queries and Python scripts within Google BigQuery using CTEs and window functions, reducing latency by 50%.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Google BigQuery</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Python</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Window Functions</span>
+                    </div>
+                </div>
+
+                <!-- Project 9: HR Analytics Dashboard Project -->
+                <div class="project-item glass-card p-8 rounded-3xl space-y-4" data-category="tableau sql">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-xl font-bold text-[#2c221e]">HR Analytics Dashboard Project</h3>
+                        <a href="https://github.com/rohitmadde0213-hub/HR-Analyatics-Dashboard-" target="_blank" class="text-xs bg-amber-100 text-amber-800 hover:bg-amber-200 px-4 py-2 rounded-full border border-amber-900/10 font-semibold transition flex items-center gap-1.5">
+                            View GitHub Repository &nearr;
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div><strong class="text-amber-700 block mb-1 uppercase text-[10px] tracking-wider">Challenge</strong> High employee attrition and fragmented workforce data across departments hindered tracking of retention drivers and job satisfaction.</div>
+                        <div><strong class="text-[#2c221e] block mb-1 uppercase text-[10px] tracking-wider">Execution & Impact</strong> Extracted and transformed raw workforce datasets using advanced SQL and built an interactive Tableau dashboard, improving decision speed by 35%.</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">GitHub Repo</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Tableau BI</span>
+                        <span class="text-[11px] bg-slate-100 text-[#2c221e] px-3 py-1 rounded-full border border-slate-200 font-medium">Advanced SQL</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= PAGE 5: CONTACT ================= -->
+        <div id="page-contact" class="page-content space-y-12">
+            <div class="space-y-3">
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#2c221e]">Get in Touch</h2>
+                <p class="text-slate-600 text-sm max-w-xl">Open for Data Analyst and BI roles. Connect with me directly through email or professional networks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Direct Contact Info Card -->
+                <div class="glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-[#2c221e]">Contact Channels</h3>
+                        <div class="space-y-3 text-sm">
+                            <a href="mailto:rohit.madde.0213@gmail.com" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex items-center gap-3 group">
+                                <span class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800 font-bold group-hover:bg-amber-600 group-hover:text-white transition">@</span>
+                                <div>
+                                    <span class="text-[10px] text-slate-500 uppercase font-semibold block">Email Address</span>
+                                    <span class="font-semibold text-[#2c221e]">rohit.madde.0213@gmail.com</span>
+                                </div>
+                            </a>
+                            <a href="https://www.linkedin.com/in/rohit-m-41223432a/" target="_blank" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex items-center gap-3">
+                                <span class="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-700 font-bold">in</span>
+                                <div>
+                                    <span class="text-[10px] text-slate-500 uppercase font-semibold block">Professional Network</span>
+                                    <span class="font-semibold text-[#2c221e]">LinkedIn Profile &nearr;</span>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rohitmadde0213-hub" target="_blank" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-600 transition flex items-center gap-3">
+                                <span class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-700 font-bold">git</span>
+                                <div>
+                                    <span class="text-[10px] text-slate-500 uppercase font-semibold block">Code Repositories</span>
+                                    <span class="font-semibold text-[#2c221e]">GitHub Hub &nearr;</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-amber-100/60 border border-amber-900/10 text-xs text-amber-900">
+                        Based in Pune, India • Working across US Time Zones.
+                    </div>
+                </div>
+
+                <!-- Interactive Quick Message Card -->
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <h3 class="text-xl font-bold text-[#2c221e]">Send a Message</h3>
+                    <form onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs">
+                        <div class="space-y-1">
+                            <label class="text-slate-600 font-medium">Your Name</label>
+                            <input type="text" required placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-slate-600 font-medium">Your Email</label>
+                            <input type="email" required placeholder="john@example.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-slate-600 font-medium">Message</label>
+                            <textarea rows="4" required placeholder="Discussing data analyst opportunities..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition shadow-md">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-5xl mx-auto px-6 py-10 text-center text-xs text-slate-500 border-t border-amber-900/10 flex flex-col sm:flex-row justify-between items-center gap-4 w-full z-10">
+        <span>© 2026 Rohit Madde. All rights reserved.</span>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="https://www.scaler.com/academy/profile/0f0079e70937" target="_blank" class="hover:text-amber-700 transition">Scaler Profile</a>
+            <a href="https://public.tableau.com/app/profile/rohit.madde/vizzes" target="_blank" class="hover:text-amber-700 transition">Tableau Vizzes</a>
+            <a href="https://github.com/rohitmadde0213-hub" target="_blank" class="hover:text-amber-700 transition">GitHub</a>
+            <a href="https://www.linkedin.com/in/rohit-m-41223432a/" target="_blank" class="hover:text-amber-700 transition">LinkedIn</a>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: DYNAMIC TYPING & MULTI-PAGE ROUTING & FILTERS -->
+    <script>
+        // Dynamic Typing Effect for Hero Subheadings
+        const phrases = [
+            "Transforming raw data into intelligent action.",
+            "I turn messy data into clean answers.",
+            "SELECT * FROM talent WHERE available = true;",
+            "Excel wizard, SQL whisperer, SAP survivor."
+        ];
+        
+        let currentPhraseIndex = 0;
+        let currentCharIndex = 0;
+        let isDeleting = false;
+        const typingSpeed = 50;
+        const deletingSpeed = 30;
+        const pauseTime = 2500;
+
+        function typeWriter() {
+            const currentPhrase = phrases[currentPhraseIndex];
+            const targetElement = document.getElementById("typing-text");
+            
+            if (!targetElement) return;
+
+            if (!isDeleting && currentCharIndex <= currentPhrase.length) {
+                targetElement.textContent = currentPhrase.substring(0, currentCharIndex);
+                currentCharIndex++;
+                setTimeout(typeWriter, typingSpeed);
+            } else if (isDeleting && currentCharIndex >= 0) {
+                targetElement.textContent = currentPhrase.substring(0, currentCharIndex);
+                currentCharIndex--;
+                setTimeout(typeWriter, deletingSpeed);
+            } else {
+                isDeleting = !isDeleting;
+                if (!isDeleting) {
+                    currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+                }
+                setTimeout(typeWriter, pauseTime);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            typeWriter();
+            navigateTo('home');
+        });
+
+        // Multi-Page Router
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+            });
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                setTimeout(() => {
+                    targetPage.classList.add('active');
+                }, 10);
+            }
+
+            ['home', 'about', 'experience', 'projects', 'contact'].forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (btn) {
+                    if (id === pageId) {
+                        btn.className = "nav-btn px-4 py-1.5 rounded-full text-white bg-amber-600 transition";
+                    } else {
+                        btn.className = "nav-btn px-4 py-1.5 rounded-full hover:text-amber-700 transition text-slate-600";
+                    }
+                }
+                const mbtn = document.getElementById('mbtn-' + id);
+                if (mbtn) {
+                    if (id === pageId) {
+                        mbtn.className = "mob-btn px-3 py-1.5 rounded-full text-white bg-amber-600";
+                    } else {
+                        mbtn.className = "mob-btn px-3 py-1.5 rounded-full text-slate-600";
+                    }
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fully Working Project Filters
+        function filterProjects(category) {
+            ['all', 'tableau', 'sql', 'eda'].forEach(cat => {
+                const btn = document.getElementById('filter-btn-' + cat);
+                if (btn) {
+                    if (cat === category) {
+                        btn.className = "filter-tab px-4 py-2 rounded-xl bg-amber-600 text-white font-semibold transition shadow-md";
+                    } else {
+                        btn.className = "filter-tab px-4 py-2 rounded-xl text-slate-600 hover:text-amber-700 transition";
+                    }
+                }
+            });
+
+            document.querySelectorAll('.project-item').forEach(item => {
+                const categories = item.getAttribute('data-category');
+                if (category === 'all' || categories.includes(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alert('Thank you for reaching out! Your message has been successfully sent to Rohit Madde.');
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
