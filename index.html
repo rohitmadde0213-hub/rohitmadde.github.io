@@ -653,17 +653,19 @@
                     <form onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs">
                         <div class="space-y-1">
                             <label class="text-slate-600 font-medium">Your Name</label>
-                            <input type="text" required placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition">
+                            <input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition">
                         </div>
                         <div class="space-y-1">
                             <label class="text-slate-600 font-medium">Your Email</label>
-                            <input type="email" required placeholder="john@example.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition">
+                            <input type="email" name="email" required placeholder="john@example.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition">
                         </div>
                         <div class="space-y-1">
                             <label class="text-slate-600 font-medium">Message</label>
-                            <textarea rows="4" required placeholder="Discussing data analyst opportunities..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition resize-none"></textarea>
+                            <textarea name="message" rows="4" required placeholder="Discussing data analyst opportunities..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[#2c221e] focus:outline-none focus:border-amber-600 transition resize-none"></textarea>
                         </div>
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition shadow-md">Send Message</button>
+                        <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition shadow-md flex items-center justify-center">
+                            <span>Send Message</span>
+                        </button>
                     </form>
                 </div>
             </div>
